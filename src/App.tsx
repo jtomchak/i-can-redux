@@ -1,7 +1,7 @@
 import React from "react";
 import type { RootState } from "./store";
 import { useSelector, useDispatch } from "react-redux";
-import { add } from "./todoSlice";
+import { add, remove } from "./todoSlice";
 import "./App.css";
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
     if (inputRef?.current?.value) {
       //dispatch our action
       dispatch(add({ title: inputRef.current.value }));
+
       if (formRef?.current) {
         formRef.current.reset();
       }
@@ -28,8 +29,11 @@ function App() {
         <input name="todoItem" ref={inputRef} type="text" />
       </form>
       <ul>
-        {globalTodos.map(({ title }) => (
-          <li key={title}>{title}</li>
+        {globalTodos.map(({ title, id }) => (
+          <li key={title}>
+            {title}
+            <button onClick={() => dispatch(remove(id))}>x</button>
+          </li>
         ))}
       </ul>
     </div>

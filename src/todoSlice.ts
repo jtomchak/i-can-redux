@@ -1,7 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
+function getRandomId() {
+  return Math.floor(Math.random() * 100000);
+}
+
 export interface TodoState {
+  id: number;
+  title: string;
+}
+
+interface TodoInput {
   title: string;
 }
 
@@ -13,8 +22,11 @@ export const todoSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    add: (state, action: PayloadAction<TodoState>) => {
-      return [...state, action.payload];
+    add: (state, action: PayloadAction<TodoInput>) => {
+      return [...state, { ...action.payload, id: getRandomId() }];
+    },
+    remove: (state, action: PayloadAction<number>) => {
+      return state.filter((todo) => todo.id !== action.payload);
     },
   },
 });
@@ -22,5 +34,5 @@ export const todoSlice = createSlice({
 // dispatch(todo.add, {title: 'milk & bread'})
 // Actions & Reducer
 
-export const { add } = todoSlice.actions;
+export const { add, remove } = todoSlice.actions;
 export default todoSlice.reducer;
